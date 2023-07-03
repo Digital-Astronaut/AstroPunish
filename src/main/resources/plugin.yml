@@ -1,0 +1,7 @@
+name: AstroPunish
+version: '${project.version}'
+main: com.pixelate.astropunish.AstroPunish
+api-version: '1.20'
+depend: [ AstroAPI ]
+authors: [ Digital_Astronaut ]
+description: An easy-to-use moderation plugin :)
