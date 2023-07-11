@@ -77,6 +77,8 @@ public class MuteCommand extends SubCommand {
                         playerToMute.getPlayer().sendMessage(ChatColor.RED + "You have been muted indefinitely");
                     }
                 }
+            } else if (args.length == 3) {
+                p.sendMessage(ChatColor.RED + "Insufficient arguments! Try /ap mute <Player> [Time] [Unit] [Reason]");
             } else if (args.length == 4) {
 
                 // /ap mute <Player> [Time] [Unit] [Reason]
@@ -193,6 +195,8 @@ public class MuteCommand extends SubCommand {
                         playerToMute.getPlayer().sendMessage(ChatColor.RED + "You have been muted indefinitely");
                     }
                 }
+            } else if (args.length == 3) {
+                ccs.sendMessage(ChatColor.RED + "Insufficient arguments! Try /ap mute <Player> [Time] [Unit] [Reason]");
             } else if (args.length == 4) {
 
                 // /ap mute <Player> [Time] [Unit] [Reason]

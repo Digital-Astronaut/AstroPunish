@@ -26,6 +26,7 @@ public final class AstroPunish extends JavaPlugin {
     private String username = "Not available to you";
     private String password = "Not available to you";
 
+
     @Override
     public void onEnable() {
 

@@ -47,6 +47,7 @@ public class BanCommand extends SubCommand {
     @Override
     public void perform(CommandSender commandSender, String[] args) {
 
+
         if (commandSender instanceof Player p) {
 
             if (!p.isOp())
@@ -65,17 +66,22 @@ public class BanCommand extends SubCommand {
 
                     SimpleDateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy - HH:mm:ss");
 
-                    if (SQLGetter.getPunishedPlayer(offlinePlayer).isBanned()) {
-                        p.sendMessage(ChatColor.RED + "That player is already banned!");
-                        return;
-                    }
+                    if (SQLGetter.getPunishedPlayer(offlinePlayer) != null) {
 
-                    SQLGetter.getPunishedPlayer(offlinePlayer).addEntryToBans(new AstroBanEntry(offlinePlayer, null, dateFormatter.format(Calendar.getInstance().getTime()), Long.MAX_VALUE, null, "No reason given", null, true));
+                        if (SQLGetter.getPunishedPlayer(offlinePlayer).isBanned()) {
+                            p.sendMessage(ChatColor.RED + "That player is already banned!");
+                            return;
+                        }
 
-                    SQLGetter.getPunishedPlayer(offlinePlayer).setBanned(true);
+                        SQLGetter.getPunishedPlayer(offlinePlayer).addEntryToBans(new AstroBanEntry(offlinePlayer, null, dateFormatter.format(Calendar.getInstance().getTime()), Long.MAX_VALUE, null, "No reason given", null, true));
 
-                    if (offlinePlayer.isOnline()) {
-                        offlinePlayer.getPlayer().kick(Component.text("You have been banned forever", NamedTextColor.RED));
+                        SQLGetter.getPunishedPlayer(offlinePlayer).setBanned(true);
+
+                        if (offlinePlayer.isOnline()) {
+                            offlinePlayer.getPlayer().kick(Component.text("You have been banned forever", NamedTextColor.RED));
+                        }
+                    } else {
+                        p.sendMessage(args[1] + " is null?");
                     }
                 }
             } else if (args.length == 3) {
@@ -90,31 +96,34 @@ public class BanCommand extends SubCommand {
 
                     OfflinePlayer offlinePlayer = Bukkit.getServer().getOfflinePlayer(args[1]);
 
-                    if (SQLGetter.getPunishedPlayer(offlinePlayer).isBanned()) {
-                        p.sendMessage(ChatColor.RED + "That player is already banned!");
-                        return;
-                    }
+                    if (SQLGetter.getPunishedPlayer(offlinePlayer) != null) {
 
-                    SimpleDateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy - HH:mm:ss");
-
-                    if (NumberUtils.isCreatable(args[2])) {
-
-                        Calendar cal = calendarStuff(args[2], args[3]);
-
-                        if (calendarStuff(args[2], args[3]) == null) {
-                            p.sendMessage(ChatColor.RED + "Improper unit! Try week, month, year, second, hour, day, or minute");
+                        if (SQLGetter.getPunishedPlayer(offlinePlayer).isBanned()) {
+                            p.sendMessage(ChatColor.RED + "That player is already banned!");
                             return;
                         }
 
-                        SQLGetter.getPunishedPlayer(offlinePlayer).addEntryToBans(new AstroBanEntry(offlinePlayer, null, dateFormatter.format(Calendar.getInstance().getTime()), Long.parseLong(args[2]), getDateUnitText(args[3]), "No reason given", dateFormatter.format(cal.getTime()), true));
+                        SimpleDateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy - HH:mm:ss");
 
-                        SQLGetter.getPunishedPlayer(offlinePlayer).setBanned(true);
+                        if (NumberUtils.isCreatable(args[2])) {
 
-                        if (offlinePlayer.isOnline()) {
-                            offlinePlayer.getPlayer().kick(Component.text(ChatColor.RED + "You have been banned for no reason"));
+                            Calendar cal = calendarStuff(args[2], args[3]);
+
+                            if (calendarStuff(args[2], args[3]) == null) {
+                                p.sendMessage(ChatColor.RED + "Improper unit! Try week, month, year, second, hour, day, or minute");
+                                return;
+                            }
+
+                            SQLGetter.getPunishedPlayer(offlinePlayer).addEntryToBans(new AstroBanEntry(offlinePlayer, null, dateFormatter.format(Calendar.getInstance().getTime()), Long.parseLong(args[2]), getDateUnitText(args[3]), "No reason given", dateFormatter.format(cal.getTime()), true));
+
+                            SQLGetter.getPunishedPlayer(offlinePlayer).setBanned(true);
+
+                            if (offlinePlayer.isOnline()) {
+                                offlinePlayer.getPlayer().kick(Component.text(ChatColor.RED + "You have been banned for no reason"));
+                            }
+                        } else {
+                            p.sendMessage(ChatColor.RED + "Invalid number!");
                         }
-                    } else {
-                        p.sendMessage(ChatColor.RED + "Invalid number!");
                     }
                 }
             } else if (args.length >= 5) {
@@ -123,12 +132,16 @@ public class BanCommand extends SubCommand {
 
                 if (Bukkit.getServer().getOfflinePlayer(args[1]) != null) {
 
+                }
+                OfflinePlayer offlinePlayer = Bukkit.getServer().getOfflinePlayer(args[1]);
+
+                if (SQLGetter.getPunishedPlayer(offlinePlayer) != null) {
+
                     if (SQLGetter.getPunishedPlayer(Bukkit.getOfflinePlayer(args[1])).isBanned()) {
                         p.sendMessage(ChatColor.RED + "That player is already banned!");
                         return;
                     }
 
-                    OfflinePlayer offlinePlayer = Bukkit.getServer().getOfflinePlayer(args[1]);
 
                     SimpleDateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy - HH:mm:ss");
 
@@ -191,17 +204,20 @@ public class BanCommand extends SubCommand {
 
                     SimpleDateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy - HH:mm:ss");
 
-                    if (SQLGetter.getPunishedPlayer(offlinePlayer).isBanned()) {
-                        ccs.sendMessage(ChatColor.RED + "That player is already banned!");
-                        return;
-                    }
+                    if (SQLGetter.getPunishedPlayer(offlinePlayer) != null) {
 
-                    SQLGetter.getPunishedPlayer(offlinePlayer).addEntryToBans(new AstroBanEntry(offlinePlayer, null, dateFormatter.format(Calendar.getInstance().getTime()), Long.MAX_VALUE, null, "No reason given", null, true));
+                        if (SQLGetter.getPunishedPlayer(offlinePlayer).isBanned()) {
+                            ccs.sendMessage(ChatColor.RED + "That player is already banned!");
+                            return;
+                        }
 
-                    SQLGetter.getPunishedPlayer(offlinePlayer).setBanned(true);
+                        SQLGetter.getPunishedPlayer(offlinePlayer).addEntryToBans(new AstroBanEntry(offlinePlayer, null, dateFormatter.format(Calendar.getInstance().getTime()), Long.MAX_VALUE, null, "No reason given", null, true));
 
-                    if (offlinePlayer.isOnline()) {
-                        offlinePlayer.getPlayer().kick(Component.text("You have been banned forever", NamedTextColor.RED));
+                        SQLGetter.getPunishedPlayer(offlinePlayer).setBanned(true);
+
+                        if (offlinePlayer.isOnline()) {
+                            offlinePlayer.getPlayer().kick(Component.text("You have been banned forever", NamedTextColor.RED));
+                        }
                     }
                 }
             } else if (args.length == 3) {
@@ -216,31 +232,34 @@ public class BanCommand extends SubCommand {
 
                     OfflinePlayer offlinePlayer = Bukkit.getServer().getOfflinePlayer(args[1]);
 
-                    if (SQLGetter.getPunishedPlayer(offlinePlayer).isBanned()) {
-                        ccs.sendMessage(ChatColor.RED + "That player is already banned!");
-                        return;
-                    }
+                    if (SQLGetter.getPunishedPlayer(offlinePlayer) != null) {
 
-                    SimpleDateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy - HH:mm:ss");
-
-                    if (NumberUtils.isCreatable(args[2])) {
-
-                        Calendar cal = calendarStuff(args[2], args[3]);
-
-                        if (calendarStuff(args[2], args[3]) == null) {
-                            ccs.sendMessage(ChatColor.RED + "Improper unit! Try week, month, year, second, hour, day, or minute");
+                        if (SQLGetter.getPunishedPlayer(offlinePlayer).isBanned()) {
+                            ccs.sendMessage(ChatColor.RED + "That player is already banned!");
                             return;
                         }
 
-                        SQLGetter.getPunishedPlayer(offlinePlayer).addEntryToBans(new AstroBanEntry(offlinePlayer, null, dateFormatter.format(Calendar.getInstance().getTime()), Long.parseLong(args[2]), getDateUnitText(args[3]), "No reason given", dateFormatter.format(cal.getTime()), true));
+                        SimpleDateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy - HH:mm:ss");
 
-                        SQLGetter.getPunishedPlayer(offlinePlayer).setBanned(true);
+                        if (NumberUtils.isCreatable(args[2])) {
 
-                        if (offlinePlayer.isOnline()) {
-                            offlinePlayer.getPlayer().kick(Component.text(ChatColor.RED + "You have been banned for no reason"));
+                            Calendar cal = calendarStuff(args[2], args[3]);
+
+                            if (calendarStuff(args[2], args[3]) == null) {
+                                ccs.sendMessage(ChatColor.RED + "Improper unit! Try week, month, year, second, hour, day, or minute");
+                                return;
+                            }
+
+                            SQLGetter.getPunishedPlayer(offlinePlayer).addEntryToBans(new AstroBanEntry(offlinePlayer, null, dateFormatter.format(Calendar.getInstance().getTime()), Long.parseLong(args[2]), getDateUnitText(args[3]), "No reason given", dateFormatter.format(cal.getTime()), true));
+
+                            SQLGetter.getPunishedPlayer(offlinePlayer).setBanned(true);
+
+                            if (offlinePlayer.isOnline()) {
+                                offlinePlayer.getPlayer().kick(Component.text(ChatColor.RED + "You have been banned for no reason"));
+                            }
+                        } else {
+                            ccs.sendMessage(ChatColor.RED + "Invalid number!");
                         }
-                    } else {
-                        ccs.sendMessage(ChatColor.RED + "Invalid number!");
                     }
                 }
             } else if (args.length >= 5) {
@@ -249,56 +268,60 @@ public class BanCommand extends SubCommand {
 
                 if (Bukkit.getServer().getOfflinePlayer(args[1]) != null) {
 
-                    if (SQLGetter.getPunishedPlayer(Bukkit.getOfflinePlayer(args[1])).isBanned()) {
-                        ccs.sendMessage(ChatColor.RED + "That player is already banned!");
-                        return;
-                    }
-
                     OfflinePlayer offlinePlayer = Bukkit.getServer().getOfflinePlayer(args[1]);
 
-                    SimpleDateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy - HH:mm:ss");
+                    if (SQLGetter.getPunishedPlayer(offlinePlayer) != null) {
 
-                    if (NumberUtils.isCreatable(args[2])) {
-
-                        if (calendarStuff(args[2], args[3]) == null) {
-                            ccs.sendMessage(ChatColor.RED + "Improper unit! Try week, month, year, second, hour, day, or minute");
+                        if (SQLGetter.getPunishedPlayer(Bukkit.getOfflinePlayer(args[1])).isBanned()) {
+                            ccs.sendMessage(ChatColor.RED + "That player is already banned!");
                             return;
                         }
 
-                        Calendar cal = calendarStuff(args[2], args[3]);
 
-                        String[] reason = new String[args.length - 4];
+                        SimpleDateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy - HH:mm:ss");
 
-                        for (int i = 4; i < args.length; i++) {
+                        if (NumberUtils.isCreatable(args[2])) {
 
-                            reason[i - 4] = args[i];
+                            if (calendarStuff(args[2], args[3]) == null) {
+                                ccs.sendMessage(ChatColor.RED + "Improper unit! Try week, month, year, second, hour, day, or minute");
+                                return;
+                            }
+
+                            Calendar cal = calendarStuff(args[2], args[3]);
+
+                            String[] reason = new String[args.length - 4];
+
+                            for (int i = 4; i < args.length; i++) {
+
+                                reason[i - 4] = args[i];
+                            }
+
+                            String concatednatedReason = String.join(" ", reason);
+
+                            Component banText = Component.text("You have been banned for reason: ", NamedTextColor.RED, TextDecoration.BOLD)
+                                    .appendNewline()
+                                    .append(LegacyComponentSerializer.legacy('&').deserialize(concatednatedReason))
+                                    .appendNewline()
+                                    .appendNewline()
+                                    .append(Component.text("For " + args[2] + " " + getDateUnitText(args[3]), NamedTextColor.AQUA))
+                                    .appendNewline()
+                                    .appendNewline()
+                                    .append(Component.text("Try again on this date: ", NamedTextColor.DARK_PURPLE, TextDecoration.BOLD))
+                                    .append(Component.text(dateFormatter.format(cal.getTime()), NamedTextColor.AQUA));
+
+                            SQLGetter.getPunishedPlayer(offlinePlayer).addEntryToBans(new AstroBanEntry(offlinePlayer, null, dateFormatter.format(Calendar.getInstance().getTime()), Long.parseLong(args[2]), getDateUnitText(args[3]), concatednatedReason, dateFormatter.format(cal.getTime()), true));
+
+                            SQLGetter.getPunishedPlayer(offlinePlayer).setBanned(true);
+
+                            ccs.sendMessage(ChatColor.GREEN + "Ban entry successfully created");
+
+                            if (offlinePlayer.isOnline()) {
+
+                                offlinePlayer.getPlayer().kick(banText);
+                            }
+                        } else {
+                            ccs.sendMessage(ChatColor.RED + "Invalid number!");
                         }
-
-                        String concatednatedReason = String.join(" ", reason);
-
-                        Component banText = Component.text("You have been banned for reason: ", NamedTextColor.RED, TextDecoration.BOLD)
-                                .appendNewline()
-                                .append(LegacyComponentSerializer.legacy('&').deserialize(concatednatedReason))
-                                .appendNewline()
-                                .appendNewline()
-                                .append(Component.text("For " + args[2] + " " + getDateUnitText(args[3]), NamedTextColor.AQUA))
-                                .appendNewline()
-                                .appendNewline()
-                                .append(Component.text("Try again on this date: ", NamedTextColor.DARK_PURPLE, TextDecoration.BOLD))
-                                .append(Component.text(dateFormatter.format(cal.getTime()), NamedTextColor.AQUA));
-
-                        SQLGetter.getPunishedPlayer(offlinePlayer).addEntryToBans(new AstroBanEntry(offlinePlayer, null, dateFormatter.format(Calendar.getInstance().getTime()), Long.parseLong(args[2]), getDateUnitText(args[3]), concatednatedReason, dateFormatter.format(cal.getTime()), true));
-
-                        SQLGetter.getPunishedPlayer(offlinePlayer).setBanned(true);
-
-                        ccs.sendMessage(ChatColor.GREEN + "Ban entry successfully created");
-
-                        if (offlinePlayer.isOnline()) {
-
-                            offlinePlayer.getPlayer().kick(banText);
-                        }
-                    } else {
-                        ccs.sendMessage(ChatColor.RED + "Invalid number!");
                     }
                 }
             }
