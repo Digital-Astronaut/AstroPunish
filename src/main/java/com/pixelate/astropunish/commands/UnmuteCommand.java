@@ -1,11 +1,15 @@
 package com.pixelate.astropunish.commands;
 
+import com.pixelate.astropunish.database.SQLGetter;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.mcjustice.astroapi.Commands.SubCommand;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,7 +44,46 @@ public class UnmuteCommand extends SubCommand {
         if (commandSender instanceof Player p) {
             if (!p.isOp()) return;
 
-            p.sendMessage(ChatColor.GOLD + "unmuted");
+            if (args.length <= 1) {
+                p.sendMessage(ChatColor.RED + "Insufficient arguments. Try /ap unmute <Player>");
+            } else if (args.length == 2) {
+                OfflinePlayer player = Bukkit.getOfflinePlayer(args[1]);
+
+                if (SQLGetter.getPunishedPlayer(player).getCurrentMute() == null) {
+                    SQLGetter.getPunishedPlayer(player).unmute();
+                    p.sendMessage(ChatColor.RED + "That player is not muted.");
+                } else {
+                    SQLGetter.getPunishedPlayer(player).unmute();
+                    p.sendMessage(ChatColor.GREEN + "Successfully unmuted " + args[1] + "!");
+
+                    if (player.isOnline()) {
+                        player.getPlayer().sendMessage(ChatColor.GREEN + "You have been unmuted!");
+                    }
+                }
+            } else {
+                p.sendMessage("Invalid arguments. Try /ap unmute <Player>");
+            }
+        } else if (commandSender instanceof ConsoleCommandSender ccs) {
+
+            if (args.length <= 1) {
+                ccs.sendMessage(ChatColor.RED + "Insufficient arguments. Try /ap unmute <Player>");
+            } else if (args.length == 2) {
+                OfflinePlayer player = Bukkit.getOfflinePlayer(args[1]);
+
+                if (SQLGetter.getPunishedPlayer(player).getCurrentMute() == null) {
+                    SQLGetter.getPunishedPlayer(player).unmute();
+                    ccs.sendMessage(ChatColor.RED + "That player is not muted.");
+                } else {
+                    SQLGetter.getPunishedPlayer(player).unmute();
+                    ccs.sendMessage(ChatColor.GREEN + "Successfully unmuted " + args[1] + "!");
+
+                    if (player.isOnline()) {
+                        player.getPlayer().sendMessage(ChatColor.GREEN + "You have been unmuted!");
+                    }
+                }
+            } else {
+                ccs.sendMessage("Invalid arguments. Try /ap unmute <Player>");
+            }
         }
     }
 

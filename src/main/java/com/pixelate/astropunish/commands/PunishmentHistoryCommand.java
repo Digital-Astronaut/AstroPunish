@@ -1,9 +1,11 @@
 package com.pixelate.astropunish.commands;
 
+import com.pixelate.astropunish.database.AstroBanEntry;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.mcjustice.astroapi.Commands.SubCommand;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -31,7 +33,7 @@ public class PunishmentHistoryCommand extends SubCommand {
 
     @Override
     public String getSyntax() {
-        return "/ap history <Player>";
+        return "/ap history <Player> [Page]";
     }
 
     @Override
@@ -40,6 +42,23 @@ public class PunishmentHistoryCommand extends SubCommand {
         if (commandSender instanceof Player p) {
             if (!p.isOp()) return;
 
+            if (args.length <= 1) {
+                p.sendMessage(ChatColor.RED + "Please specify a player");
+                p.sendMessage(ChatColor.AQUA + "/ap history <Player> [Page]");
+                return;
+            } else if (args.length == 2) {
+
+                if (Bukkit.getOfflinePlayer(args[1]) != null) {
+
+                    p.sendMessage(ChatColor.YELLOW + "-----------------------------------------------------");
+
+//                    for (AstroBanEntry entry : AstroBanEntry.getPlayerBans(Bukkit.getOfflinePlayer(args[1]))) {
+//
+//                        p.sendMessage(ChatColor.AQUA + "Banned for " + entry.getBanLength() + " " + entry.getBanUnit() + " - Reason: " + entry.getBanReason() + " | Unbanned on: " + entry.getUnbanDate());
+//                        p.sendMessage(ChatColor.YELLOW + "-----------------------------------------------------");
+//                    }
+                }
+            }
             p.sendMessage(ChatColor.BLUE + "Showing history");
         }
     }

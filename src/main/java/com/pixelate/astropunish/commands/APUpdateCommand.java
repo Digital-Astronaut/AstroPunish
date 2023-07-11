@@ -1,11 +1,11 @@
 package com.pixelate.astropunish.commands;
 
-import com.pixelate.astropunish.inventories.PunishmentsMainMenu;
+import com.pixelate.astropunish.database.SQLUpdater;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.examination.Examinable;
 import net.mcjustice.astroapi.Commands.SubCommand;
-import net.mcjustice.astroapi.Inventory.MenuManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -14,26 +14,26 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
-public class PunishmentMenuCommand extends SubCommand {
+public class APUpdateCommand extends SubCommand {
 
     @Override
     public String getName() {
-        return "menu";
+        return "update";
     }
 
     @Override
     public String getDescription() {
-        return "Displays the punishment menu";
+        return "Updates the database to reflect memory values";
     }
 
     @Override
     public List<String> getAliases() {
-        return Arrays.asList("pmen", "punishmenu", "punishmentmenu");
+        return Arrays.asList("u", "up", "upload");
     }
 
     @Override
     public String getSyntax() {
-        return "/ap menu";
+        return "/ap update";
     }
 
     @Override
@@ -42,7 +42,12 @@ public class PunishmentMenuCommand extends SubCommand {
         if (commandSender instanceof Player p) {
             if (!p.isOp()) return;
 
-            new PunishmentsMainMenu(MenuManager.getPlayerMenuUtility(p)).open();
+            if (args.length == 1) {
+                SQLUpdater.uploadDataToDatabase();
+                p.sendMessage(ChatColor.GREEN + "Successfully updated database!");
+            } else {
+                p.sendMessage(ChatColor.RED + "Invalid usage. Try /ap update");
+            }
         }
     }
 
@@ -59,7 +64,7 @@ public class PunishmentMenuCommand extends SubCommand {
 
     @Nullable
     @Override
-    public HoverEvent getSubCommandHoverEvent() {
+    public HoverEvent<? extends Examinable> getSubCommandHoverEvent() {
         return null;
     }
 
